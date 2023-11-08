@@ -1,0 +1,38 @@
+# Chess assignment report
+
+(Replace the square-bracketed text with your own text. *Leave everything else unchanged.* Note, the reports are parsed to check word limits, etc. Changing the format may cause the parsing to fail.)
+
+## Feature Extraction (Max 200 Words)
+
+First of all, I found that in the feature selection stage, it is required to reduce the dimensionality of the input feature to a 10-dimensional vector representation. Then, I observed the input data and found that each sample is in the form of an image matrix with 10 rows and 10 columns. In the feature selection process, after thinking, I think that a representative row or column can be selected, or a linear combination of several rows and several columns can be selected, so that a 10-dimensional vector can be satisfied. But after carefully observing the small input image, I found that it is difficult to find certain rows or columns in the images of various chess pieces that can clearly distinguish different patterns of various chess pieces. Therefore, I also thought of using PCA or FDA two algorithms for dimensionality reduction. I first tried the PCA method in the project. After the joint classification algorithm, I found that I got a good accuracy rate. So, in the end I chose the PCA algorithm as my feature selection method.
+
+During the implementation of PCA, I made some mistakes and found that the accuracy rate was not high. After checking the code carefully, I found that I separately performed PCA dimensionality reduction on the training samples, and performed another PCA dimensionality reduction on the test samples. This is equivalent to performing PCA dimensionality reduction on the two types of data respectively. Then, after I performed PCA dimensionality reduction on the training samples, I saved the transition matrix in the model. When the test samples were input, I read the transition matrix and used the same mapping to reduce the dimensionality of the test samples. In the end, a very high accuracy rate was obtained.
+
+## Classifier (Max 200 Words)
+
+There are many classification algorithms that can be used to identify the category of the chess piece pattern, such as k nearest neighbors, support vector machines, neural networks, classification trees, gradient boosting, and so on. Considering the complexity of the implementation process, I chose the K nearest neighbor algorithm to achieve this task. Because this task is the easiest to achieve when third-party libraries are not used. In the process of implementing this algorithm, the training process is to store the category labels corresponding to all samples in the model itself. The prediction process is to calculate the distance between the input sample and all stored samples, and select K sample labels with the closest distance to vote to determine the category of the predicted sample. Among them, the distance metric adopts L1 distance, because this kind of calculation is the smallest. In the entire algorithm implementation process, the matrix parallel calculation method provided by the numpy library is used, which makes the algorithm run much faster. 
+
+After programming the k-nearest neighbor algorithm, in order to get a better effect, I searched for the setting of the k value. Set the final classification accuracy of observations with different k values. It is found that when k is 6, the classification accuracy is the highest. Therefore, the final model adopts the k-nearest neighbor model with k=6.
+
+
+## Full Board Classification (Max 200 Words)
+
+After thinking about it, I think that to input the entire chessboard image and output the chess pieces type of each grid, perhaps we can use the convolutional neural network method. The final output is a 3-dimensional tensor, and each element is a onehot classification. But I think that the accuracy of disassembling the chess pieces to predict the entire chessboard is already very high, and the accuracy of the above method may not be higher. At the same time, due to the complexity of the implementation process, I did not implement it.
+
+## Performance
+
+My percentage correctness scores (to 1 decimal place) for the development data are as follows.
+
+Clean data:
+
+- Square mode: 98.3%
+- Board mode: 98.3%
+
+Noisy data:
+
+- Square mode: 93.9%
+- Board mode: 93.9%
+
+## Other information (Optional, Max 100 words)
+
+[Optional: highlight any significant aspects of your system that are NOT covered in the sections above]
